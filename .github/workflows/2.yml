@@ -1,12 +1,12 @@
-name: 手动触发的工作流程
+name: 自动备份数据库
 
 on:
   workflow_dispatch:
 
 env:
-  LAF_APPID: ${{ secrets.HYSLI_API_TEST_APPID }}
-  LAF_PAT: ${{ secrets.HYSLI_API_TEST_PAT }}
-  API_URL: ${{ secrets.HYSLI_API_TEST_URL }}
+  LAF_APPID: ${{ secrets.LAF_APPID }}
+  LAF_PAT: ${{ secrets.LAF_PAT }}
+  API_URL: ${{ secrets.API_URL }}
   STORAGE_NAME: ${{ secrets.STORAGE_NAME }}
 
 jobs:
@@ -28,21 +28,20 @@ jobs:
       - name: Login laf-cli
         working-directory: laf-cloud
         run: |
-          laf user add ${{ env.LAF_APPID }} -r ${{ env.API_URL }}
-          laf user switch ${{ env.LAF_APPID }}
+          laf user add $LAF_APPID -r $API_URL
+          laf user switch $LAF_APPID
           laf login $LAF_PAT
-          laf app init ${{ env.LAF_APPID }}
+          laf app init $LAF_APPID
         # 发布推送的云函数代码推送到指定的 Laf 应用，只有合并成功的代码才会发布
-      - name: Get current date
+      - name: 获取当前时间
         env:
           TZ: Asia/Shanghai
         id: date
         run: echo "::set-output name=today::$(date +'%Y-%m-%d_%H-%M-%S')"
-      - name: Depoy Laf Functions
+      - name: 备份数据到云存储
         working-directory: laf-cloud
         run: |
           laf db export ./
-          ls
           mkdir db
-          mv ${{ env.LAF_APPID }}-db.gz db/${{ steps.date.outputs.today }}-db.gz
-          laf storage push ${{ env.STORAGE_NAME }} db
+          mv $LAF_APPID-db.gz db/${{ steps.date.outputs.today }}-db.gz
+          laf storage push $STORAGE_NAME db
