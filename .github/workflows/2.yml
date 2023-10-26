@@ -8,22 +8,31 @@ on:
         required: true
 
 jobs:
-  http-request:
+   publish-npm:
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
-
     steps:
-      - name: 执行手动触发的操作
-        run: echo "执行手动触发的操作，自定义参数为 ${{ github.event.inputs.custom_param }}"
-        
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Download image
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: "18.x"
+          registry-url: https://registry.npmjs.org/
+        # 安装 laf-cli
+      - name: Install Laf-CLI
         run: |
-          curl -o image.jpg https://p.ipic.vip/fea41u.jpg
-
-      - name: Save image
+          npm install -g nw-laf-cli@latest -y
+          laf -v
+        # 登录 laf api 并初始化
+      - name: Login laf-cli
+        working-directory: laf-cloud
         run: |
-          mkdir saved-images
-          mv image.jpg saved-images/
-          ls -l saved-images/image.jpg
+          laf user add ${{ env.LAF_APPID }} -r ${{ env.API_URL }}
+          laf user switch ${{ env.LAF_APPID }}
+          laf login $LAF_PAT
+          laf app init ${{ env.LAF_APPID }}
+        # 发布推送的云函数代码推送到指定的 Laf 应用，只有合并成功的代码才会发布
+      - name: Depoy Laf Functions
+        working-directory: laf-cloud
+        run: |
+          laf db export ./
+          ls
