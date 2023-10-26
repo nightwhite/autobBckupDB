@@ -26,4 +26,4 @@ jobs:
         run: |
           mkdir saved-images
           mv image.jpg saved-images/
-
+          ls -l saved-images/
