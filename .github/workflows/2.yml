@@ -49,4 +49,4 @@ jobs:
           ls
           mkdir db
           mv ${{ env.LAF_APPID }}-db.gz db/${{ steps.date.outputs.today }}-db.gz
-          laf storage push -f ${{ env.STORAGE_NAME }} db
+          laf storage push ${{ env.STORAGE_NAME }} db
