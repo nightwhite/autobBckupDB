@@ -41,12 +41,12 @@ jobs:
         env:
           TZ: Asia/Shanghai
         id: date
-        run: echo "::set-output name=today::$(date +'%Y-%m-%d')"
+        run: echo "::set-output name=today::$(date + %Y-%m-%d_%H-%M-%S')"
       - name: Depoy Laf Functions
         working-directory: laf-cloud
         run: |
           laf db export ./
           ls
           mkdir db
-          mv ${{ env.LAF_APPID }}-db.gz db/${{ steps.date.outputs.today }}}-db.gz
+          mv ${{ env.LAF_APPID }}-db.gz db/${{ steps.date.outputs.today }}-db.gz
           laf storage push -f ${{ env.STORAGE_NAME }} db
