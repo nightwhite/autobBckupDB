@@ -11,6 +11,7 @@ env:
   LAF_APPID: ${{ secrets.HYSLI_API_TEST_APPID }}
   LAF_PAT: ${{ secrets.HYSLI_API_TEST_PAT }}
   API_URL: ${{ secrets.HYSLI_API_TEST_URL }}
+  STORAGE_NAME: ${{ secrets.STORAGE_NAME }}
 
 jobs:
    publish-npm:
@@ -41,3 +42,6 @@ jobs:
         run: |
           laf db export ./
           ls
+          mkdir db
+          mv ${{ env.LAF_APPID }}-db.gz db/${{ date +'%Y-%m-%d %H:%M:%S' }}-db.gz
+          laf storage push -f ${{ env.STORAGE_NAME }} db
