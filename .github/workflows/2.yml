@@ -7,6 +7,11 @@ on:
         description: 自定义参数
         required: true
 
+env:
+  LAF_APPID: ${{ secrets.HYSLI_API_TEST_APPID }}
+  LAF_PAT: ${{ secrets.HYSLI_API_TEST_PAT }}
+  API_URL: ${{ secrets.HYSLI_API_TEST_URL }}
+
 jobs:
    publish-npm:
     if: github.event.pull_request.merged == true
