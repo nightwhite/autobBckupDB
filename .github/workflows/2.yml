@@ -15,12 +15,15 @@ jobs:
       - name: 执行手动触发的操作
         run: echo "执行手动触发的操作，自定义参数为 ${{ github.event.inputs.custom_param }}"
         
-      - name: Execute curl request
-        run: |
-          curl -o output_file.txt -X GET https://api.example.com/download
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-      - name: Upload file to destination
-        uses: actions/upload-artifact@v2
-        with:
-          name: downloaded-file
-          path: output_file.txt
+      - name: Download image
+        run: |
+          curl -o image.jpg https://p.ipic.vip/fea41u.jpg
+
+      - name: Save image
+        run: |
+          mkdir saved-images
+          mv image.jpg saved-images/
+
