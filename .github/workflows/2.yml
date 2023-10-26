@@ -26,6 +26,7 @@ jobs:
         run: |
           npm install -g nw-laf-cli@latest -y
           laf -v
+          mkdir laf-cloud
         # 登录 laf api 并初始化
       - name: Login laf-cli
         working-directory: laf-cloud
