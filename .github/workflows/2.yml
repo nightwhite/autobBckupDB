@@ -15,16 +15,12 @@ jobs:
       - name: 执行手动触发的操作
         run: echo "执行手动触发的操作，自定义参数为 ${{ github.event.inputs.custom_param }}"
         
-      - name: Checkout repository
-        uses: actions/checkout@v2
+      - name: Execute curl request
+        run: |
+          curl -o output_file.txt -X GET https://api.example.com/download
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
+      - name: Upload file to destination
+        uses: actions/upload-artifact@v2
         with:
-          node-version: 14
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Send HTTP request
-        run: node send-request.js ${{ github.event.inputs.custom_param }}"
+          name: downloaded-file
+          path: output_file.txt
