@@ -1,0 +1,16 @@
+name: 手动触发的工作流程
+
+on:
+  workflow_dispatch:
+    inputs:
+      custom_param:
+        description: 自定义参数
+        required: true
+
+jobs:
+  http-request:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 执行手动触发的操作
+        run: echo "执行手动触发的操作，自定义参数为 ${{ github.event.inputs.custom_param }}"
