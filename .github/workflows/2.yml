@@ -39,9 +39,12 @@ jobs:
         # 发布推送的云函数代码推送到指定的 Laf 应用，只有合并成功的代码才会发布
       - name: Depoy Laf Functions
         working-directory: laf-cloud
+        env:
+          TZ: Asia/Shanghai
         run: |
           laf db export ./
           ls
           mkdir db
-          mv ${{ env.LAF_APPID }}-db.gz db/${{ date +'%Y-%m-%d %H:%M:%S' }}-db.gz
+          current_time=$(date +'%Y-%m-%d_%H-%M-%S')
+          mv ${{ env.LAF_APPID }}-db.gz db/${{ current_time }}-db.gz
           laf storage push -f ${{ env.STORAGE_NAME }} db
