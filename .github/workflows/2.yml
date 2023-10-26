@@ -2,10 +2,6 @@ name: 手动触发的工作流程
 
 on:
   workflow_dispatch:
-    inputs:
-      custom_param:
-        description: 自定义参数
-        required: true
 
 env:
   LAF_APPID: ${{ secrets.HYSLI_API_TEST_APPID }}
