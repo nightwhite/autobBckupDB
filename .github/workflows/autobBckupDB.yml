@@ -32,7 +32,6 @@ jobs:
           laf user switch $LAF_APPID
           laf login $LAF_PAT
           laf app init $LAF_APPID
-        # 发布推送的云函数代码推送到指定的 Laf 应用，只有合并成功的代码才会发布
       - name: 获取当前时间
         env:
           TZ: Asia/Shanghai
